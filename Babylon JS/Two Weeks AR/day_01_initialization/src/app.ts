@@ -1,6 +1,6 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, Mesh, MeshBuilder } from "@babylonjs/core";
+import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
 
 class App {
     constructor() {
@@ -17,8 +17,10 @@ class App {
 
         const camera: ArcRotateCamera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
         camera.attachControl(canvas, true);
-        const light1: HemisphericLight = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-        const sphere: Mesh = MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
+        // Add light to scene
+        new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
+        // Add mesh to scene
+        MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
 
         // hide/show the Inspector
         window.addEventListener("keydown", (ev) => {
