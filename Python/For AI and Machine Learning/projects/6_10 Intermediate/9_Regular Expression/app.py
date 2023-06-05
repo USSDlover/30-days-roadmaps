@@ -2,7 +2,7 @@ import re
 
 
 def validate_ir_phone(number):
-    pattern = r"[09]{2}[1,3,2]{1}[0-9]{8}"
+    pattern = r"[09]{2}[1,3,2]{1}\d{8}"
 
     try:
         print(f"Find All: {re.findall(pattern, number)}")
