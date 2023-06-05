@@ -1,0 +1,19 @@
+{
+  "name": "two-weeks-ar",
+  "version": "1.0.0",
+  "description": "**Day 1:** Familiarization with Babylon.js - Explore the official [Babylon.js website](https://www.babylonjs.com/). - Read the [documentation's introduction](https://doc.babylonjs.com/) for an overview. - Set up a development environment, including installing necessary tools and libraries.",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^4.3.9"
+  },
+  "devDependencies": {
+    "@babylonjs/core": "^6.6.0",
+    "@babylonjs/inspector": "^6.6.0"
+  }
+}
