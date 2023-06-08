@@ -2,35 +2,44 @@ import numpy as np
 from typing import List
 
 
+def get_max_by_attribute(array, attribute):
+    values = np.array([dictionary[attribute] for dictionary in array])
+    max_index = np.argmax(values)
+    return array[max_index]
+
+
 def merge_dicts(array: List[dict], attribute):
     # Get values of the attribute in dict
-    keys = np.array([dictionary[attribute] for dictionary in array])
-    print(f"Keys: {keys}")
+    values = np.array([dictionary[attribute] for dictionary in array])
     # Remove duplicates
-    unique_keys = np.unique(keys)
-    print(f"Unique Keys: {unique_keys}")
+    unique_values = np.unique(values)
 
     merged_array: List[dict] = []
-    for key in unique_keys:
+    # Use unique values to find dictionaries in array with the unique value
+    for value in unique_values:
         merged_dict = {}
+        # Go through dictionaries inside the array argument to find the value same as this one
         for dictionary in array:
-            if dictionary[attribute] == key:
+            # dict.name("john") == "john"
+            if dictionary[attribute] == value:
+                # To add the keys to merged_dict one by one
                 for dict_key in dictionary.keys():
-                    if dict_key == "quantity_sold":
-                        dictionary.update({"quantity_sold": int(dictionary.get(dict_key)) + int(merged_dict.get(dict_key))})
-
-                    if dict_key == "revenue":
-                        dictionary.update({"revenue": int(dictionary.get(dict_key)) + int(merged_dict.get(dict_key))})
-
-                    merged_dict.update(dictionary)
+                    if (dict_key == "quantity_sold") | (dict_key == "revenue"):
+                        try:
+                            if dict_key in merged_dict:
+                                merged_dict.update({dict_key: int(dictionary.get(dict_key)) + int(merged_dict.get(dict_key))})
+                            else:
+                                merged_dict.update({dict_key: dictionary.get(dict_key)})
+                        except Exception as e:
+                            print(f"Error on adding QS: {e}")
+                    else:
+                        merged_dict.update({f"{dict_key}": dictionary.get(dict_key)})
         merged_array.append(merged_dict)
 
     return merged_array
 
 
 def each_product_revenue(sales: List[dict]):
-    # print("Calculate each product total revenue")
-    print(f"Received this sales: {sales[0].keys()}")
     try:
         merged_sales = merge_dicts(sales, "product")
         print(f"Merged sales: {merged_sales}")
