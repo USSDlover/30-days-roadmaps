@@ -1,9 +1,13 @@
 import "@babylonjs/core/Debug/debugLayer";
 import "@babylonjs/inspector";
-import { Engine, Scene, ArcRotateCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
+import { Engine, Scene, Vector3, HemisphericLight, MeshBuilder, FreeCamera } from '@babylonjs/core';
 
 class App {
     constructor() {
+        this.createScene();
+    }
+
+    async createScene() {
         // create the canvas html element and attach it to the webpage
         const canvas = document.createElement("canvas");
         canvas.style.width = "100%";
@@ -11,33 +15,30 @@ class App {
         canvas.id = "gameCanvas";
         document.body.appendChild(canvas);
 
-        // initialize babylon scene and engine
         const engine = new Engine(canvas, true);
         const scene = new Scene(engine);
 
-        const camera: ArcRotateCamera = new ArcRotateCamera("Camera", Math.PI / 2, Math.PI / 2, 2, Vector3.Zero(), scene);
+        const camera = new FreeCamera('camera1', new Vector3(0, 5, -10), scene);
+        camera.setTarget(Vector3.Zero());
         camera.attachControl(canvas, true);
-        // Add light to scene
-        new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-        // Add mesh to scene
-        MeshBuilder.CreateSphere("sphere", { diameter: 1 }, scene);
 
-        // hide/show the Inspector
-        window.addEventListener("keydown", (ev) => {
-            // Shift+Ctrl+Alt+I
-            if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.keyCode === 73) {
-                if (scene.debugLayer.isVisible()) {
-                    scene.debugLayer.hide();
-                } else {
-                    scene.debugLayer.show();
-                }
-            }
+        const light = new HemisphericLight('light1', new Vector3(0, 1, 0), scene);
+        light.intensity = 0.7;
+
+        const sphere = MeshBuilder.CreateSphere('sphere1', { segments: 16, diameter: 2 }, scene);
+        sphere.position.y = 1;
+
+        scene.createDefaultEnvironment();
+
+        await scene.createDefaultXRExperienceAsync({
+            uiOptions: { sessionMode: 'immersive-ar' },
+            optionalFeatures: true
         });
 
-        // run the main render loop
         engine.runRenderLoop(() => {
             scene.render();
         });
     }
 }
+
 new App();
